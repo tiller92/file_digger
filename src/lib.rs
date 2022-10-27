@@ -7,7 +7,11 @@ pub fn search_for_name(name:String, path:String){
 
 pub fn recursive_file_search(name: String, path:String ) {
 // if no next file/ folser then break
-     let directory = read_dir(path).unwrap();
+     let directory = match read_dir(path){
+        Ok(directory) => directory,
+        Err(e) => return println!("{:?} err at dir/file", e),
+     };
+
     //item is a DirEntry Struct
     for item in directory{
         let dir = item.unwrap();
@@ -28,5 +32,7 @@ pub fn recursive_file_search(name: String, path:String ) {
             Err(e) => println!("{:?},{:?} was not sure what to do here with this one",e, dir),
         }
 }
+
+
 }
 
