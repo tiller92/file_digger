@@ -1,8 +1,10 @@
 use std::fs::{metadata,read_dir};
+use std::path;
+
 #[derive(Debug)]
 pub struct Config {
-   path:String,
-   query:String, 
+ pub path:String,
+ pub query:String, 
 }
 
 impl Config {
@@ -24,9 +26,12 @@ impl Config {
 
 }
 
-pub fn search_for_name(config: Result<Config, &'static str>){ 
-    // recursivly search through a computer file system macOS
-    let config = config.unwrap();
+pub fn handle_args(config:Result<Config,&'static str>){ 
+    //fn really just handles the config struct and handles errors before we start recursing 
+   let config = match config {
+        Ok(config) => config,
+        _ => Config{path:String::from("/"), query:String::from(" ") }, 
+   }; 
     recursive_file_search(config.query,config.path);
 }
 
@@ -42,22 +47,27 @@ pub fn recursive_file_search(name: String, path:String ) {
         let dir = item.unwrap();
         let meta = metadata(dir.path());
         match meta {
-            Ok(place) => { if place.is_file() {
-                println!("is file {:?}", dir)
+            Ok(place) => {
+                if place.is_dir() {println!("{}", dir.path().to_str().unwrap());};
+                if place.is_file() { 
+                    println!("-----{}", dir.path().file_name().unwrap().to_str().unwrap());
+                let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
+                let query: path::PathBuf = path::PathBuf::from(&name);
+                //println!(" location{:?} query {:?}", location, query);
+                if location == query {
+                  //  println!("found location");
+                  }
+            
             }else{
-                println!("folder {:?}", dir.path());
                 let buff_path = dir.path();
                 let str_path = buff_path.to_str().unwrap();
                 let string_path:String = String::from(str_path); 
                 let new_name = String::from(&name);
-                println!("new path {:?}", str_path );
                 recursive_file_search(new_name,string_path )
                 }
             },
             Err(e) => println!("{:?},{:?} was not sure what to do here with this one",e, dir),
         }
-}
-
 
 }
-
+}
