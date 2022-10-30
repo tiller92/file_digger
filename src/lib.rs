@@ -40,7 +40,7 @@ pub fn handle_args(config:Result<Config,&'static str>){
             println!("{}", item);
         }
     }else {
-        println!("No file or Directory with the name '{}'", user_query) 
+        println!("No file or Directory with the name » '{}'", user_query) 
     }
 }
 
@@ -61,7 +61,7 @@ pub fn recursive_file_search(name: String, path:String ) -> Vec<String>{
         match meta {
             Ok(place) => {
                 if place.is_dir() {
-                    println!("{}", dir.path().to_str().unwrap());
+                    println!(" {}", dir.path().to_str().unwrap());
                     let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                     let query: path::PathBuf = path::PathBuf::from(&name);
                     if path_to_dir == query {
@@ -70,10 +70,9 @@ pub fn recursive_file_search(name: String, path:String ) -> Vec<String>{
                         }
                     }
                 if place.is_file() { 
-                    println!("-----{}", dir.path().file_name().unwrap().to_str().unwrap());
+                    println!("   »»»»  :{}", dir.path().file_name().unwrap().to_str().unwrap());
                 let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                 let query: path::PathBuf = path::PathBuf::from(&name);
-                //println!(" location{:?} query {:?}", location, query);
                 if location == query {
                     let item:String = String::from(dir.path().to_str().unwrap());
                     res.push(item)

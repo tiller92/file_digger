@@ -1,8 +1,7 @@
-### File Digger
-    Searches through all the folders and files of a path that is given as the first argument ex: (/User/foo/bar). Pass a string
-    as the second variable and it will return any file or folder with that string. 
-
-    example//
-        ""                                      "" 
-        ""  dig /User/folder/folder 'filename'  ""
-        ""                                      ""
+### File Digger (rip_tree)
+   Recreating the popular tree command but with rust. Some goals inlcude: 
+        *implementing popular tree commands,
+        *creating a verison with similar performance, 
+        *a version with a nice looking command line output,
+     
+ 
