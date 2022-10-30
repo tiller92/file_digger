@@ -53,7 +53,15 @@ pub fn recursive_file_search(name: String, path:String ) -> Vec<String>{
         let meta = metadata(dir.path());
         match meta {
             Ok(place) => {
-                if place.is_dir() {println!("{}", dir.path().to_str().unwrap());};
+                if place.is_dir() {
+                    println!("{}", dir.path().to_str().unwrap());
+                    let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
+                    let query: path::PathBuf = path::PathBuf::from(&name);
+                    if path_to_dir == query {
+                        let item:String = String::from(dir.path().to_str().unwrap());
+                        res.push(item)
+                        }
+                    }
                 if place.is_file() { 
                     println!("-----{}", dir.path().file_name().unwrap().to_str().unwrap());
                 let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
