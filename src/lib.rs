@@ -2,6 +2,7 @@ use std::fs::{metadata,read_dir};
 use std::path;
 
 #[derive(Debug)]
+// make a fast and pretty recurse, bool value passes to handle args in the config
 pub struct Config {
  pub path:String,
  pub query:String, 
@@ -25,21 +26,25 @@ impl Config {
     }
 
 }
-
+// handle arg length and finalize funcionality
 pub fn handle_args(config:Result<Config,&'static str>){ 
     //fn really just handles the config struct and handles errors before we start recursing 
    let config = match config {
         Ok(config) => config,
         _ => Config{path:String::from("/"), query:String::from(" ") }, 
    }; 
-    recursive_file_search(config.query,config.path);
+    let res = recursive_file_search(config.query,config.path);
+    println!("{:?}", res)
 }
 
-pub fn recursive_file_search(name: String, path:String ) {
+pub fn recursive_file_search(name: String, path:String ) -> Vec<String>{
+    // prettier verison that is slow but cool returns the number of folders and files searched and 
+    // the ends with a vec of folders an files with the query(name)
    //Direcotory is an iterator that contains all the files or folders on the given path  
+    let mut res:Vec<String> = Vec::new();
     let directory = match read_dir(path){
         Ok(directory) => directory,
-        Err(e) => return println!("{:?} make sure the path argument leads to a directory", e),
+        Err(e) => return res , 
      };
 
     //item is a DirEntry Struct
@@ -55,19 +60,23 @@ pub fn recursive_file_search(name: String, path:String ) {
                 let query: path::PathBuf = path::PathBuf::from(&name);
                 //println!(" location{:?} query {:?}", location, query);
                 if location == query {
-                  //  println!("found location");
-                  }
+                    let item:String = String::from(dir.path().to_str().unwrap());
+                    res.push(item)
+                }
             
             }else{
                 let buff_path = dir.path();
                 let str_path = buff_path.to_str().unwrap();
                 let string_path:String = String::from(str_path); 
                 let new_name = String::from(&name);
-                recursive_file_search(new_name,string_path )
-                }
+                let res2 = recursive_file_search(new_name,string_path );
+                    for file in res2 {
+                        res.push(file)
+                    }
+            }
             },
             Err(e) => println!("{:?},{:?} was not sure what to do here with this one",e, dir),
         }
-
 }
+res
 }
