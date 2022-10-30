@@ -32,9 +32,16 @@ pub fn handle_args(config:Result<Config,&'static str>){
    let config = match config {
         Ok(config) => config,
         _ => Config{path:String::from("/"), query:String::from(" ") }, 
-   }; 
+   };
+    let user_query:String = String::from(&config.query); 
     let res = recursive_file_search(config.query,config.path);
-    println!("{:?}", res)
+    if res.len() > 0 {
+        for item in res {
+            println!("{}", item);
+        }
+    }else {
+        println!("No file or Directory with the name '{}'", user_query) 
+    }
 }
 
 pub fn recursive_file_search(name: String, path:String ) -> Vec<String>{
