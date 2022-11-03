@@ -1,6 +1,6 @@
 use std::fs::{metadata,read_dir};
 use std::path;
-
+mod flag;
 pub struct Config {
     pub local_path:String,
     pub path:String,
@@ -15,6 +15,7 @@ impl Config {
             Some(path) => path,
             None => String::from(" ") 
        };
+       println!("  **current local path {:?}", local_path);
         // confirms if user gave a folder/file path
        let mut user_path:String = String::from(&local_path);
        let string_path_id = "/";
@@ -28,16 +29,18 @@ impl Config {
 
        // check for a string that doesnt start with a '-' that will be out query
        let mut query:String = String::from(" "); 
-        let args_after_two:Vec<String> = args.collect();
+       let args_after_two:Vec<String> = args.collect();
           for arg in args_after_two {
-              if arg.starts_with("-"){
+              println!("{:?}",arg);
+              if arg.starts_with("--help"){
                 //eventually add more functionality with flags
+              let msg = flag::flags(String::from(&arg));
+                   println!("{}", msg);
               }else if arg.contains("/"){
                   println!("another path?")
               }else {
                  query = String::from(&arg);
               }
-            println!("arg:  {}", arg);
        }  
        Ok(Config{
            path:user_path,
