@@ -1,10 +1,10 @@
-use file_digger;
+use riptree;
 use std::env;
 
 
 // users should pass arg as follows path , query, then flags
 fn main() { 
    let args = env::args();
-   let config = file_digger::Config::build(args);
-   file_digger::handle_args(config)
+   let config = riptree::Config::build(args);
+   riptree::handle_args(config)
 }

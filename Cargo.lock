@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "file_digger"
+name = "riptree"
 version = "0.1.0"

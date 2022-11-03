@@ -1,7 +1,6 @@
 use std::fs::{metadata,read_dir};
 use std::path;
 
-#[derive(Debug)]
 pub struct Config {
     pub local_path:String,
     pub path:String,
@@ -23,7 +22,6 @@ impl Config {
             Some(path)=>path,
             None => String::from(&local_path),
        };
-       println!("{}", path);
        if path.contains(string_path_id){
             user_path = path.clone();
        }
@@ -39,7 +37,7 @@ impl Config {
               }else {
                  query = String::from(&arg);
               }
-            println!("arg:  {:?}", arg);
+            println!("arg:  {}", arg);
        }  
        Ok(Config{
            path:user_path,
@@ -65,7 +63,6 @@ pub fn handle_args(config:Result<Config, &'static str>){
                     query:String::from(" "),
                     } 
     };
-    println!("{:?}", config);
     let user_query:String = String::from(&config.query); 
     let res = recursive_file_search(config.query,config.path);
     if res.found.len() > 0 {

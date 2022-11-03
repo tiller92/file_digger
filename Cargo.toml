@@ -1,7 +1,16 @@
 [package]
-name = "file_digger"
+name = "riptree"
 version = "0.1.0"
 edition = "2021"
+authors = ["Ryan Tiller ryantiller6@gmail.com"]
+license = "MIT or Apache-2.0"
+description = "diplays and searcheds through direcrtories"
+readme = "README.md"
+repository = "https://github.com/tiller92/file_digger"
+homepage = "https://www.ryanwebdev.io/"
+keywords = ["cli", "search", "projects", "recursive"]
+categories = ["command-line-utilities"]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
