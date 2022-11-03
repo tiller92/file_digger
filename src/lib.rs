@@ -29,18 +29,21 @@ impl Config {
        }
 
        // check for a string that doesnt start with a '-' that will be out query
+       let mut query:String = String::from(" "); 
         let args_after_two:Vec<String> = args.collect();
           for arg in args_after_two {
               if arg.starts_with("-"){
                 //eventually add more functionality with flags
               }else if arg.contains("/"){
-                println!("another path?")
+                  println!("another path?")
+              }else {
+                 query = String::from(&arg);
               }
             println!("arg:  {:?}", arg);
        }  
        Ok(Config{
            path:user_path,
-           query:String::from("no query"),
+           query:query,
            local_path})
     }
 }
@@ -66,13 +69,13 @@ pub fn handle_args(config:Result<Config, &'static str>){
     let user_query:String = String::from(&config.query); 
     let res = recursive_file_search(config.query,config.path);
     if res.found.len() > 0 {
+    println!(" folders {}, files {} ", res.folders, res.files);
         for item in res.found {
-            println!("{}", item);
+            println!("file foungd at path {}", item);
         }
-    }else {
+    }else if user_query != " "{
         println!(" No file or Directory with the name » '{}'", user_query) 
     }
-    println!(" folders {}, files {} ", res.folders, res.files);
 }
 
 pub fn recursive_file_search(name: String, path:String ) -> Pretty{
