@@ -2,28 +2,32 @@ use std::fs::{metadata,read_dir};
 use std::path;
 
 #[derive(Debug)]
-// make a fast and pretty recurse, bool value passes to handle args in the config
 pub struct Config {
- pub path:String,
- pub query:String, 
+    pub cur_path:String,
+    pub path:String,
+    pub query:String, 
 }
 
 impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
-        args.next();
+
+       let cur_path = match args.next(){
+            Some(path) => path,
+            None =>  String::from(" ") 
+       };
 
         let path = match args.next() {
             Some(arg) => arg,
-            None => return Err("You must add a path so I know where to start digging"),
+            None => String::from(" ") 
         };
-
         let query = match args.next() {
             Some(arg) => arg,
-            None => return Err("No query so just count all folder and files"), 
+            None => String::from(" ")
         };
-       Ok(Config{path, query})
+       Ok(Config{path, query, cur_path})
     }
+
 
 }
 
@@ -34,19 +38,22 @@ pub struct Pretty {
     files:u32,
 }
 // handle arg length and finalize funcionality
-pub fn handle_args(config:Result<Config,&'static str>){ 
+pub fn handle_args(config:Result<Config, &'static str>){ 
     //fn really just handles the config struct and handles errors before we start recursing 
-   let config = match config {
+    let config = match config {
         Ok(config) => config,
-        _ => Config{path:String::from("/"), query:String::from(" ") }, 
-   };
+        _ =>  Config{cur_path:String::from("/"),
+                    path:String::from("/"),
+                    query:String::from(" "),
+                    } 
+    };
+    if config.query == String::from(" ") {
+        println!("{:?}" , config);
+    }
     let user_query:String = String::from(&config.query); 
-    
-    let res = recursive_file_search(config.query,config.path);
    
-    let files:u32 = 0;
-    let folders:u32 = 0;
-    
+    let res = recursive_file_search(config.query,config.path);
+     
     if res.found.len() > 0 {
         for item in res.found {
             println!("{}", item);
@@ -61,10 +68,9 @@ pub fn recursive_file_search(name: String, path:String ) -> Pretty{
     // Slow hopefully cool looking verions 
     // need to add counts for files and folders
     let mut file_count:u32 = 0;
-    let mut folder_count:u32 = 1;
+    let mut folder_count:u32 = 0;
     
 
-    println!("{}", path);
     let mut res:Vec<String> = Vec::new();
     let directory = match read_dir(path){
         Ok(directory) => directory,
@@ -105,6 +111,7 @@ pub fn recursive_file_search(name: String, path:String ) -> Pretty{
                     }
             
                 }else{
+                    // if current file turn into a string call pass it
                     let buff_path = dir.path();
                     let str_path = buff_path.to_str().unwrap();
                     let string_path:String = String::from(str_path); 
