@@ -3,7 +3,7 @@ use std::path;
 
 #[derive(Debug)]
 pub struct Config {
-    pub cur_path:String,
+    pub local_path:String,
     pub path:String,
     pub query:String, 
 }
@@ -11,24 +11,26 @@ pub struct Config {
 impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
-
-       let cur_path = match args.next(){
+        //should always be current path
+       let local_path = match args.next(){
             Some(path) => path,
-            None =>  String::from(" ") 
-       };
-
-        let path = match args.next() {
-            Some(arg) => arg,
             None => String::from(" ") 
-        };
-        let query = match args.next() {
-            Some(arg) => arg,
-            None => String::from(" ")
-        };
-       Ok(Config{path, query, cur_path})
+       };
+       let mut user_path:String = String::from(&local_path);
+       let string_path_id = "/";
+       let path = match args.next(){
+            Some(path)=>path,
+            None => String::from(&local_path),
+       };
+       println!("{}", path);
+       if path.contains(string_path_id){
+            user_path = path.clone();
+       }
+       Ok(Config{
+           path:user_path,
+           query:String::from("no query"),
+           local_path})
     }
-
-
 }
 
 // struct that hold the res of the cooler (pretty) recurse function
@@ -37,23 +39,20 @@ pub struct Pretty {
     folders: u32,
     files:u32,
 }
+
 // handle arg length and finalize funcionality
 pub fn handle_args(config:Result<Config, &'static str>){ 
     //fn really just handles the config struct and handles errors before we start recursing 
-    let config = match config {
+    let mut config = match config {
         Ok(config) => config,
-        _ =>  Config{cur_path:String::from("/"),
+        _ =>  Config{local_path:String::from("/"),
                     path:String::from("/"),
                     query:String::from(" "),
                     } 
     };
-    if config.query == String::from(" ") {
-        println!("{:?}" , config);
-    }
+    println!("{:?}", config);
     let user_query:String = String::from(&config.query); 
-   
     let res = recursive_file_search(config.query,config.path);
-     
     if res.found.len() > 0 {
         for item in res.found {
             println!("{}", item);
