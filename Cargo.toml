@@ -1,6 +1,6 @@
 [package]
 name = "riptree"
-version = "0.1.0"
+version = "0.1.l"
 edition = "2021"
 authors = ["Ryan Tiller ryantiller6@gmail.com"]
 license = "MIT OR Apache-2.0"
