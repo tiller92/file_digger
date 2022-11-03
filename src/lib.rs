@@ -136,7 +136,9 @@ pub fn recursive_file_search(name: String, path:String ) -> Pretty{
                     file_count = file_count + res2.files;
                     }
             },
-            Err(e) => println!("{:?},{:?} was not sure what to do here with this one",e, dir),
+            Err(e) => println!("{},{} was not sure what to do here with this one" , 
+                e,
+                dir.path().to_str().unwrap())
         }
     }
     let res_pretty = Pretty {
