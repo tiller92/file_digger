@@ -16,6 +16,7 @@ impl Config {
             Some(path) => path,
             None => String::from(" ") 
        };
+        // confirms if user gave a folder/file path
        let mut user_path:String = String::from(&local_path);
        let string_path_id = "/";
        let path = match args.next(){
@@ -26,6 +27,17 @@ impl Config {
        if path.contains(string_path_id){
             user_path = path.clone();
        }
+
+       // check for a string that doesnt start with a '-' that will be out query
+        let args_after_two:Vec<String> = args.collect();
+          for arg in args_after_two {
+              if arg.starts_with("-"){
+                //eventually add more functionality with flags
+              }else if arg.contains("/"){
+                println!("another path?")
+              }
+            println!("arg:  {:?}", arg);
+       }  
        Ok(Config{
            path:user_path,
            query:String::from("no query"),
@@ -43,7 +55,7 @@ pub struct Pretty {
 // handle arg length and finalize funcionality
 pub fn handle_args(config:Result<Config, &'static str>){ 
     //fn really just handles the config struct and handles errors before we start recursing 
-    let mut config = match config {
+    let config = match config {
         Ok(config) => config,
         _ =>  Config{local_path:String::from("/"),
                     path:String::from("/"),
