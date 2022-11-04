@@ -2,6 +2,7 @@ use std::fs::{metadata,read_dir};
 use std::path;
 use std::env;
 mod flag;
+
 pub struct Config {
     pub local_path:String,
     pub path:String,
@@ -12,6 +13,7 @@ impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
         args.next();
+        
         //should always be current path
        let local_dir = match env::current_dir(){
             Ok(l_path) => l_path,
@@ -25,6 +27,8 @@ impl Config {
             Some(path)=>path,
             None => String::from(local_dir.to_str().unwrap()),
        };
+       
+       let mut query:String = String::from(" "); 
        if path.starts_with("--help"){
             let msg = flag::flags(path.clone());
             println!("{}", msg);
@@ -35,10 +39,11 @@ impl Config {
         }
        if path.contains(string_path_id){
             user_path = path.clone();
+       }else if path.len() > 0{
+          query = path;
        }
-
+       
        // check for a string that doesnt start with a '-' that will be out query
-       let mut query:String = String::from(" "); 
        let args_after_two:Vec<String> = args.collect();
           for arg in args_after_two {
               if arg.starts_with("--help"){
@@ -46,6 +51,10 @@ impl Config {
                   println!("{}", msg);
               }else if arg.contains("/"){
                   println!("another path?")
+                      
+              }else if arg.starts_with("-"){
+                    let msg = flag::flags(String::from(&arg));
+                    println!("{}",msg);
               }else {
                  query = String::from(&arg);
               }
@@ -54,7 +63,6 @@ impl Config {
            path:user_path,
            query:query,
            local_path:local_path,
-           
        })
     }
 }
@@ -73,7 +81,7 @@ pub fn handle_args(config:Result<Config, &'static str>){
         Ok(config) => config,
         _ =>  Config{local_path:String::from("/"),
                     path:String::from("/"),
-                    query:String::from(" "),
+                    query:String::from(""),
                     } 
     };
     let user_query:String = String::from(&config.query); 
