@@ -86,8 +86,8 @@ pub fn handle_args(config:Result<Config, &'static str>){
     };
     let user_query:String = String::from(&config.query); 
     let res = recursive_file_search(config.query,config.path);
-    if res.found.len() > 0 {
     println!(" folders {}, files {} ", res.folders, res.files);
+    if res.found.len() > 0 {
     println!("  '{}' was found in the following paths:", user_query);
         for item in res.found {
                 println!("       {}", item);
