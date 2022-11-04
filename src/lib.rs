@@ -1,5 +1,6 @@
 use std::fs::{metadata,read_dir};
 use std::path;
+use std::env;
 mod flag;
 pub struct Config {
     pub local_path:String,
@@ -10,19 +11,28 @@ pub struct Config {
 impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
+        args.next();
         //should always be current path
-       let local_path = match args.next(){
-            Some(path) => path,
-            None => String::from(" ") 
+       let local_dir = match env::current_dir(){
+            Ok(l_path) => l_path,
+            Err(_e) => return Err("problem getting current directory {e}" ),
        };
-       println!("  **current local path {:?}", local_path);
+       let local_path = String::from(local_dir.to_str().unwrap()); 
         // confirms if user gave a folder/file path
-       let mut user_path:String = String::from(&local_path);
+       let mut user_path:String = String::from(local_dir.to_str().unwrap());
        let string_path_id = "/";
        let path = match args.next(){
             Some(path)=>path,
-            None => String::from(&local_path),
+            None => String::from(local_dir.to_str().unwrap()),
        };
+       if path.starts_with("--help"){
+            let msg = flag::flags(path.clone());
+            println!("{}", msg);
+            return Ok(Config{path:String::from("help"),
+            query:String::from(" "),
+            local_path:String::from(" ")
+            });
+        }
        if path.contains(string_path_id){
             user_path = path.clone();
        }
@@ -31,11 +41,9 @@ impl Config {
        let mut query:String = String::from(" "); 
        let args_after_two:Vec<String> = args.collect();
           for arg in args_after_two {
-              println!("{:?}",arg);
               if arg.starts_with("--help"){
-                //eventually add more functionality with flags
-              let msg = flag::flags(String::from(&arg));
-                   println!("{}", msg);
+                  let msg = flag::flags(String::from(&arg));
+                  println!("{}", msg);
               }else if arg.contains("/"){
                   println!("another path?")
               }else {
@@ -45,7 +53,9 @@ impl Config {
        Ok(Config{
            path:user_path,
            query:query,
-           local_path})
+           local_path:local_path,
+           
+       })
     }
 }
 
@@ -70,8 +80,9 @@ pub fn handle_args(config:Result<Config, &'static str>){
     let res = recursive_file_search(config.query,config.path);
     if res.found.len() > 0 {
     println!(" folders {}, files {} ", res.folders, res.files);
+    println!("  '{}' was found in the following paths:", user_query);
         for item in res.found {
-            println!("file foungd at path {}", item);
+                println!("       {}", item);
         }
     }else if user_query != " "{
         println!(" No file or Directory with the name » '{}'", user_query) 
@@ -88,7 +99,7 @@ pub fn recursive_file_search(name: String, path:String ) -> Pretty{
     let mut res:Vec<String> = Vec::new();
     let directory = match read_dir(path){
         Ok(directory) => directory,
-        Err(_e) =>  {
+        Err(_) =>  {
         let fail = Pretty {
                     found:res,
                     folders:0,
