@@ -2,7 +2,7 @@ use std::fs::{metadata,read_dir};
 use std::path;
 use std::env;
 mod flag;
-
+// add a flag option 
 pub struct Config {
     pub local_path:String,
     pub path:String,
@@ -13,7 +13,6 @@ impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
         args.next();
-        
         //should always be current path
        let local_dir = match env::current_dir(){
             Ok(l_path) => l_path,
