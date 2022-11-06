@@ -2,6 +2,7 @@ use std::fs::{metadata,read_dir};
 use std::path;
 use std::env;
 mod flag;
+mod recurse;
 // add a flag option 
 pub struct Config {
     pub local_path:String,
