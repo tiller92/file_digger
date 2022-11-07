@@ -10,6 +10,7 @@ pub struct Config {
     pub query:String, 
 }
 
+
 impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
