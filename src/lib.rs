@@ -4,7 +4,6 @@ mod recurse;
 mod recursive_file_search;
 // add a flag option 
 pub struct Config {
-    pub local_path:String,
     pub path:String,
     pub query:String, 
 }
@@ -14,13 +13,11 @@ impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
         args.next();
-        //should always be current path
+       // get the local path in case no path is given 
        let local_dir = match env::current_dir(){
             Ok(l_path) => l_path,
             Err(_e) => return Err("problem getting current directory {e}" ),
        };
-       let local_path = String::from(local_dir.to_str().unwrap()); 
-        // confirms if user gave a folder/file path
        let mut user_path:String = String::from(local_dir.to_str().unwrap());
        let string_path_id = "/";
        let path = match args.next(){
@@ -32,9 +29,9 @@ impl Config {
        if path.starts_with("--help"){
             let msg = flag::flags(path.clone());
             println!("{}", msg);
-            return Ok(Config{path:String::from("help"),
-            query:String::from(" "),
-            local_path:String::from(" ")
+            return Ok(Config{
+                path:String::from("help"),
+                query:String::from(" "),
             });
         }
        if path.contains(string_path_id){
@@ -62,18 +59,17 @@ impl Config {
        Ok(Config{
            path:user_path,
            query:query,
-           local_path:local_path,
        })
     }
 }
 
 
 // handle arg length and finalize funcionality
-pub fn handle_args(config:Result<Config, &'static str>){ 
+pub fn run(config:Result<Config, &'static str>){ 
     //fn really just handles the config struct and handles errors before we start recursing 
     let config = match config {
         Ok(config) => config,
-        _ =>  Config{local_path:String::from("/"),
+        _ =>  Config{
                     path:String::from("/"),
                     query:String::from(""),
                     } 
