@@ -6,6 +6,7 @@ mod recursive_file_search;
 pub struct Config {
     pub path:String,
     pub query:String, 
+    pub flag:Vec<String>,
 }
 
 
@@ -13,32 +14,36 @@ impl Config {
     // handle all command line interface in build pass a to recursice func type config
     pub fn build(mut args: impl Iterator<Item = String> ) -> Result<Config, &'static str> {
         args.next();
-       // get the local path in case no path is given 
-       let local_dir = match env::current_dir(){
+       // gets the local directory path in case the user does not give a path
+        let local_dir = match env::current_dir(){
             Ok(l_path) => l_path,
             Err(_e) => return Err("problem getting current directory {e}" ),
        };
        let mut user_path:String = String::from(local_dir.to_str().unwrap());
-       let string_path_id = "/";
-       let path = match args.next(){
+       // next arg is either a path or a flag could be nothing if nothing return local path
+       let arg_one = match args.next(){
             Some(path)=>path,
             None => String::from(local_dir.to_str().unwrap()),
        };
        
-       let mut query:String = String::from(" "); 
-       if path.starts_with("--help"){
-            let msg = flag::flags(path.clone());
+       if arg_one.starts_with("--help"){
+            // ref &str is better to pass here
+            let msg = flag::flags(arg_one.clone());
             println!("{}", msg);
-            return Ok(Config{
-                path:String::from("help"),
-                query:String::from(" "),
-            });
-        }
-       if path.contains(string_path_id){
-            user_path = path.clone();
-       }else if path.len() > 0{
-          query = path;
+            std::process::exit(1); 
        }
+       // check to see if a path was given and if not was it a query?? 
+       let mut query:String = String::new();
+       let mut flags:Vec<String> = Vec::new();
+       //string_path_id should me more thourogh. Most likely a fn that returns a bool.
+       let string_path_id = "/";
+           if arg_one.contains(string_path_id){
+                user_path = arg_one.clone();
+           }else if arg_one.len() > 0 && arg_one.starts_with("-") == false {
+                query = arg_one.clone();
+           }else {
+                flags.push(arg_one);
+           }
        
        // check for a string that doesnt start with a '-' that will be out query
        let args_after_two:Vec<String> = args.collect();
@@ -46,19 +51,20 @@ impl Config {
               if arg.starts_with("--help"){
                   let msg = flag::flags(String::from(&arg));
                   println!("{}", msg);
-              }else if arg.contains("/"){
-                  println!("another path?")
                       
               }else if arg.starts_with("-"){
                     let msg = flag::flags(String::from(&arg));
                     println!("{}",msg);
+                    flags.push(arg)
               }else {
                  query = String::from(&arg);
               }
-       }  
+       } 
+          println!("flags {:?}",flags);
        Ok(Config{
            path:user_path,
            query:query,
+           flag:flags,
        })
     }
 }
@@ -72,8 +78,10 @@ pub fn run(config:Result<Config, &'static str>){
         _ =>  Config{
                     path:String::from("/"),
                     query:String::from(""),
+                    flag:Vec::new(),
                     } 
     };
+    
     let user_query:String = String::from(&config.query); 
     let res = recursive_file_search::recursive_file_search(config.query,config.path);
     println!(" folders {}, files {} ", res.folders, res.files);
@@ -82,7 +90,7 @@ pub fn run(config:Result<Config, &'static str>){
         for item in res.found {
                 println!("       {}", item);
         }
-    }else if user_query != " "{
+    }else if user_query != ""{
         println!(" No file or Directory with the name » '{}'", user_query) 
     }
 }
