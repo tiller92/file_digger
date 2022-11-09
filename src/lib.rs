@@ -2,7 +2,9 @@ use std::env;
 mod flag;
 mod recurse;
 mod recursive_file_search;
-// add a flag option 
+mod no_dot_files_verbose_path;
+
+
 pub struct Config {
     pub path:String,
     pub query:String, 
@@ -83,43 +85,67 @@ pub fn run(config:Result<Config, &'static str>){
        // set func variable and that gets filled with the func needed to satisfy res
     if config.flag.len() > 1 {
         // logic for multiple flags
-        // -v -f (notsupported)
         if config.flag[0] == String::from("-v") && config.flag[1] == String::from("-f"){
                 println!("can not fast search and be verbose, flag combo is not supporeted, remove -f flag");
-            } else if config.flag[0] == String::from("-f") && config.flag[1] == String::from("-l"){
+        } else if config.flag[0] == String::from("-f") && config.flag[1] == String::from("-v"){
                 println!("can not fast search and be verbose, flag combo is not supporeted, remove -f flag");
-                } else if config.flag[0] == String::from("-v") && config.flag[1] == String::from("-l") {
-                    println!("needs a function that prints fulle path and ignores . files");
-                    } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-v") {
-                        println!("needs a function that prints fulle path and ignores . files");
-                        } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-f"){
-                            println!("fast search and skip . files");
-                            } else if config.flag[0] == String::from("-f") && config.flag[1] == String::from("-l"){
-                                println!("fast search and skip . files");
-                                }else{
-                                    println!("did not recognize flag options {}, {}", config.flag[0], config.flag[1]);        
+        } else if config.flag[0] == String::from("-v") && config.flag[1] == String::from("-l") {
+                        let user_query:String = String::from(&config.query); 
+                        println!("{}", &config.path);
+                        let res = no_dot_files_verbose_path::no_dot_files_verbose_path(config.query,config.path);
+                            println!(" folders {}, files {} ", res.folders, res.files);
+                        if res.found.len() > 0 {
+                            println!("  '{}' was found in the following paths:", user_query);
+                            for item in res.found {
+                                println!("       {}", item);
+                                }
+                        }else if user_query != ""{
+                                println!(" No file or Directory with the name » '{}'", user_query) 
+                                }
+        } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-v") {
+                        let user_query:String = String::from(&config.query); 
+                            println!("{}", &config.path);
+                        let res = no_dot_files_verbose_path::no_dot_files_verbose_path(config.query,config.path);
+                            println!(" folders {}, files {} ", res.folders, res.files);
+                            if res.found.len() > 0 {
+                                println!("  '{}' was found in the following paths:", user_query);
+                                for item in res.found {
+                                    println!("       {}", item);
+                                    }
+                            }else if user_query != ""{
+                                println!(" No file or Directory with the name » '{}'", user_query)
                             }
-        } 
+        } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-f"){
+                            println!("fast search and skip . files");
+        } else if config.flag[0] == String::from("-f") && config.flag[1] == String::from("-l"){
+                            println!("fast search and skip . files");
+        }else{
+            println!("did not recognize flag options {}, {}", config.flag[0], config.flag[1]);        
+            }
+     }else 
      if config.flag.len() == 1 {
          if config.flag[0] == String::from("-l") {
             println!("pretty recurse but ignore . files");
              } else if config.flag[0] == String::from("-f") && config.query != String::from(""){
-                 println!("fast searcj needs a query ")
+                 println!("fast search needs a query ")
                  } else if config.flag[0] == String::from("-v") { 
                      println!("be verbose with file path");
                  }
-                 }
-    let user_query:String = String::from(&config.query); 
-    let res = recursive_file_search::recursive_file_search(config.query,config.path);
-        println!(" folders {}, files {} ", res.folders, res.files);
-    if res.found.len() > 0 {
-        println!("  '{}' was found in the following paths:", user_query);
-        for item in res.found {
+     }else
+     if config.flag.len() == 0 {
+        let user_query:String = String::from(&config.query); 
+        let res = recursive_file_search::recursive_file_search(config.query,config.path);
+            println!(" folders {}, files {} ", res.folders, res.files);
+        if res.found.len() > 0 {
+            println!("  '{}' was found in the following paths:", user_query);
+            for item in res.found {
                 println!("       {}", item);
+            }
+        }else if user_query != ""{
+            println!(" No file or Directory with the name » '{}'", user_query) 
         }
-    }else if user_query != ""{
-        println!(" No file or Directory with the name » '{}'", user_query) 
-    }
+     }
+                 
 }
 
 

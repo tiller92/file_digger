@@ -12,13 +12,6 @@ pub fn flags(flag:String)-> String {
 
                 
             ");
-    }else
-    if flag == "-l" {
-        _msg = String::from("
-                do something with -l
-            ");
-    }else {
-        _msg= String::from("no flag found by name" );
     }
     _msg
 }
