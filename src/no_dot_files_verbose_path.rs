@@ -29,27 +29,27 @@ pub fn no_dot_files_verbose_path(query: String, path: String) -> recursive_file_
             Ok(place) => {
                 if place.is_dir() {
                     if dir.path().file_name().unwrap().to_str().unwrap().starts_with(".") ==false {
-                    folder_count = folder_count +1;
-                    println!(" {}", dir.path().to_str().unwrap());
-                    let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
-                    let query: path::PathBuf = path::PathBuf::from(&query);
-                    if path_to_dir == query {
-                        let item:String = String::from(dir.path().to_str().unwrap());
-                        res.push(item)
+                        folder_count = folder_count +1;
+                        println!(" {}", dir.path().to_str().unwrap());
+                        let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
+                        let query: path::PathBuf = path::PathBuf::from(&query);
+                        if path_to_dir == query {
+                            let item:String = String::from(dir.path().to_str().unwrap());
+                            res.push(item)
                         }
                     }
                 }
                  if place.is_file() { 
                     if dir.path().file_name().unwrap().to_str().unwrap().starts_with(".") ==false {
-                    file_count = file_count +1;
-                    println!("   »»»» {}", dir.path().file_name().unwrap().to_str().unwrap());
-                    let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
-                    let query: path::PathBuf = path::PathBuf::from(&query);
+                        file_count = file_count +1;
+                        println!("   »»»» {}", dir.path().file_name().unwrap().to_str().unwrap());
+                        let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
+                        let query: path::PathBuf = path::PathBuf::from(&query);
                         if location == query {
                             let item:String = String::from(dir.path().to_str().unwrap());
                             res.push(item)
                     }
-            
+                     
                     }else{
                         // if current file turn into a string call pass it
                         let buff_path = dir.path();
