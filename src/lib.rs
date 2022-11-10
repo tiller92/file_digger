@@ -162,7 +162,7 @@ pub fn run(config:Result<Config, &'static str>){
                             }else if user_query != ""{
                                 println!(" No file or Directory with the name » '{}'", user_query)
                             }
-         } else if config.flag[0] == String::from("-f") && config.query != String::from(""){
+         } else if config.flag[0] == String::from("-f"){ 
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
                         let res = fast_search_all::fast_search_all(config.query, config.path);      
@@ -176,8 +176,18 @@ pub fn run(config:Result<Config, &'static str>){
                                 println!(" No file or Directory with the name » '{}'", user_query)
                             }
          } else if config.flag[0] == String::from("-v") { 
-                     println!("be verbose with file path");
-             }
+            let user_query:String = String::from(&config.query); 
+            let res = recursive_file_search::recursive_file_search(config.query,config.path);
+                println!(" folders {}, files {} ", res.folders, res.files);
+            if res.found.len() > 0 {
+                println!("  '{}' was found in the following paths:", user_query);
+                for item in res.found {
+                    println!("       {}", item);
+                }
+            }else if user_query != ""{
+                println!(" No file or Directory with the name » '{}'", user_query) 
+                }
+         }   
      }else
      if config.flag.len() == 0 {
         let user_query:String = String::from(&config.query); 

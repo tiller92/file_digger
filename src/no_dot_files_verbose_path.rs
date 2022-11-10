@@ -27,8 +27,8 @@ pub fn no_dot_files_verbose_path(query: String, path: String) -> recursive_file_
         let meta = metadata(dir.path());
         match meta {
             Ok(place) => {
+                if dir.file_name().to_str().unwrap().starts_with(".") == false {
                 if place.is_dir() {
-                    if dir.path().file_name().unwrap().to_str().unwrap().starts_with(".") ==false {
                         folder_count = folder_count +1;
                         println!(" {}", dir.path().to_str().unwrap());
                         let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
@@ -38,9 +38,7 @@ pub fn no_dot_files_verbose_path(query: String, path: String) -> recursive_file_
                             res.push(item)
                         }
                     }
-                }
                  if place.is_file() { 
-                    if dir.path().file_name().unwrap().to_str().unwrap().starts_with(".") ==false {
                         file_count = file_count +1;
                         println!("   »»»» {}", dir.path().file_name().unwrap().to_str().unwrap());
                         let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
@@ -64,7 +62,7 @@ pub fn no_dot_files_verbose_path(query: String, path: String) -> recursive_file_
                         folder_count = folder_count + res2.folders;
                         file_count = file_count + res2.files;
                     }
-                 }
+                }
             },
             Err(e) => println!("{},{} was not sure what to do here with this one" , 
                 e,
