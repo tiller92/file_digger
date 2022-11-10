@@ -17,12 +17,14 @@
         ` riptree /path/to/folder 'query' -f `
        
 
-        just calling riptree will the display the folders and files of the current directory
+        just calling riptree will display the folders and files of the current directory
         `riptree` (will use your current directory) 
 
         look for a file fast and skip . files
         `riptree 'query' -f -l`
 
+        search for a file or directory in the current directory 
+        `riptree 'query'`
         
         for more riptree --help
         `riptree --help`
