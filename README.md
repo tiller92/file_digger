@@ -13,7 +13,16 @@
         `cargo install riptree`
    
   # Usage 
-    example 
+        search for a file in a given directory -f flag will not print anything until its done searching.
         ` riptree /path/to/folder 'query' -f `
        
+
+        just calling riptree will the display the folders and files of the current directory
         `riptree` (will use your current directory) 
+
+        look for a file fast and skip . files
+        `riptree 'query' -f -l`
+
+        
+        for more riptree --help
+        `riptree --help`
