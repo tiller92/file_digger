@@ -29,7 +29,6 @@ pub fn fast_search_no_dots(query: String, path: String) ->  recursive_file_searc
               if dir.file_name().to_str().unwrap().starts_with(".") == false {
               if place.is_dir() {
                   folder_count = folder_count +1;
-                  println!(" {}", dir.path().to_str().unwrap());
                   let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&query);
                   if path_to_dir == query {
@@ -39,7 +38,6 @@ pub fn fast_search_no_dots(query: String, path: String) ->  recursive_file_searc
               }
                if place.is_file() { 
                   file_count = file_count +1;
-                  println!("   »»»» {}", dir.path().file_name().unwrap().to_str().unwrap());
                   let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&query);
                       if location == query {

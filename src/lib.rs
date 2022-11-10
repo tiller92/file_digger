@@ -1,6 +1,5 @@
 use std::env;
 mod flag;
-mod recurse;
 mod recursive_file_search;
 mod no_dot_files_verbose_path;
 mod fast_search_no_dots;
