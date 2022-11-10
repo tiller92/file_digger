@@ -36,9 +36,9 @@ impl Config {
             println!("{}", msg);
             std::process::exit(1); 
        }
+       let mut flags:Vec<String> = Vec::new();
        // check to see if a path was given and if not was it a query?? 
        let mut query:String = String::new();
-       let mut flags:Vec<String> = Vec::new();
        //string_path_id should me more thourogh. Most likely a fn that returns a bool.
        let string_path_id = "/";
            if arg_one.contains(string_path_id){
