@@ -12,7 +12,7 @@
    #  Install 
         `cargo install riptree`
    
-  Usage 
+  # Usage 
     example 
         ` riptree /path/to/folder 'query' -f `
        
