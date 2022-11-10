@@ -32,7 +32,7 @@ impl Config {
        
        if arg_one.starts_with("--help"){
             // ref &str is better to pass here
-            let msg = flag::flags(arg_one.clone());
+            let msg = flag::help(arg_one.clone());
             println!("{}", msg);
             std::process::exit(1); 
        }
@@ -53,11 +53,11 @@ impl Config {
        let args_after_two:Vec<String> = args.collect();
           for arg in args_after_two {
               if arg.starts_with("--help"){
-                  let msg = flag::flags(String::from(&arg));
+                  let msg = flag::help(String::from(&arg));
                   println!("{}", msg);
                       
               }else if arg.starts_with("-"){
-                    let msg = flag::flags(String::from(&arg));
+                    let msg = flag::help(String::from(&arg));
                     println!("{}",msg);
                     flags.push(arg)
               }else {

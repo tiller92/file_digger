@@ -1,5 +1,5 @@
 
-pub fn flags(flag:String)-> String {
+pub fn help(flag:String)-> String {
     let mut _msg:String = String::from(" ");
     if flag == "--help" {
          _msg = String::from("
