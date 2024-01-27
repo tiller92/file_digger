@@ -5,7 +5,7 @@ mod no_dot_files_verbose_path;
 mod fast_search_no_dots;
 mod pretty_recurse_no_dots;
 mod fast_search_all;
-
+mod recursive_print_all;
 
 pub struct Config {
     pub path:String,
@@ -55,7 +55,6 @@ impl Config {
               if arg.starts_with("--help"){
                   let msg = flag::help(String::from(&arg));
                   println!("{}", msg);
-                      
               }else if arg.starts_with("-"){
                     let msg = flag::help(String::from(&arg));
                     println!("{}",msg);
@@ -146,12 +145,12 @@ pub fn run(config:Result<Config, &'static str>){
         }else{
             println!("did not recognize flag options {}, {}", config.flag[0], config.flag[1]);        
             }
-     }else 
-     if config.flag.len() == 1 {
-         if config.flag[0] == String::from("-l") {
+     }else if config.flag.len() == 1 {
+        // logic a singal flag passed. Also if statement hell what idiot wrote this... 
+         if config.flag[0] == String::from("-a") {
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = pretty_recurse_no_dots::pretty_recurse_no_dots(config.query, config.path);      
+                        let res: recursive_print_all::Pretty = recursive_print_all::recursive_print_all(config.query, config.path);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);
@@ -180,11 +179,11 @@ pub fn run(config:Result<Config, &'static str>){
                 println!(" folders {}, files {} ", res.folders, res.files);
             if res.found.len() > 0 {
                 println!("  '{}' was found in the following paths:", user_query);
-                for item in res.found {
-                    println!("       {}", item);
-                }
-            }else if user_query != ""{
-                println!(" No file or Directory with the name » '{}'", user_query) 
+                    for item in res.found {
+                        println!("       {}", item);
+                    }
+                }else if user_query != ""{
+                    println!(" No file or Directory with the name » '{}'", user_query) 
                 }
          }   
      }else
