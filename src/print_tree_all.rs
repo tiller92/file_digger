@@ -1,4 +1,5 @@
-// -a or -all this should show or search all dir even hidden files 
+// -a or -all this should show or search all dir even hidden files this should
+// be tht pretty version so breath first display 
 use std::fs::{metadata,read_dir};
 use std::path;
 
@@ -9,11 +10,9 @@ pub struct Pretty {
     pub files:u32,
 }
 
-pub fn recursive_print_all(name: String, path:String ) -> Pretty{
+pub fn recursive_print_all(name: String, path:String, depth:u32) -> Pretty{
   let mut file_count:u32 = 0;
   let mut folder_count:u32 = 0;
-  
-
   let mut res:Vec<String> = Vec::new();
   let directory = match read_dir(path.clone()){
       Ok(directory) => directory,
@@ -26,31 +25,25 @@ pub fn recursive_print_all(name: String, path:String ) -> Pretty{
       return fail    
       } , 
    };
-   // doing this just to get length
-let path_clone = path.clone();
-let directory_clone = match read_dir(path_clone){
-      Ok(directory) => directory,
-      Err(_) =>  {
-      let fail = Pretty {
-                  found:res,
-                  folders:0,
-                  files:0,
-              };   
-      return fail    
-      } , 
-   };
-   println!("{:?}", directory_clone.count());
-   // this loops though the currents path dirs and prints it folders and files but I need it print all of the folder and files of the
-   // current directory first. what if I just pass the curren Dir to recursive 
+  // queue of folders that need printed while there is a queue of fodler
   for item in directory{ 
-        // find the size of item and see when you have printed that many things call the recurse but onlt do this to display 
+    // each current folder and file 
       let dir = item.unwrap();
       let meta = metadata(dir.path());
       match meta {
           Ok(place) => {
+                  let mut dash_string = String::from("|-");
+                  for i in 0..depth{
+                    dash_string.insert(0,' '); 
+                  } 
+                  for i in 0..depth{
+                    dash_string.push('-');
+                  } 
               if place.is_dir() {
+            // print folder
+            // now print each folder and file
                   folder_count = folder_count + 1;
-                  println!(" {}", dir.path().to_str().unwrap());
+                  println!("{}{}",dash_string, dir.file_name().to_str().unwrap());
                   let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&name);
                   if path_to_dir == query {
@@ -61,7 +54,7 @@ let directory_clone = match read_dir(path_clone){
 
                if place.is_file() { 
                   file_count = file_count +1;
-                  println!("   »» {}", dir.path().file_name().unwrap().to_str().unwrap());
+                  println!("{}{}",dash_string, dir.path().file_name().unwrap().to_str().unwrap());
                   let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&name);
                       if location == query {
@@ -74,7 +67,7 @@ let directory_clone = match read_dir(path_clone){
                   let str_path = buff_path.to_str().unwrap();
                   let string_path:String = String::from(str_path); 
                   let new_name = String::from(&name);
-                  let res2 = recursive_print_all(new_name,string_path );
+                  let res2 = recursive_print_all(new_name,string_path, depth+1);
                       for file in res2.found {
                           res.push(file)
                       }

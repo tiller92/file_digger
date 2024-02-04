@@ -6,6 +6,7 @@ mod fast_search_no_dots;
 mod pretty_recurse_no_dots;
 mod fast_search_all;
 mod recursive_print_all;
+mod print_tree_all;
 
 pub struct Config {
     pub path:String,
@@ -37,7 +38,7 @@ impl Config {
             std::process::exit(1); 
        }
        let mut flags:Vec<String> = Vec::new();
-       // check to see if a path was given and if not was it a query?? 
+       // check to see if a path wnew_dir);iven and if not was it a query?? 
        let mut query:String = String::new();
        //string_path_id should me more thourogh. Most likely a fn that returns a bool.
        let string_path_id = "/";
@@ -149,8 +150,8 @@ pub fn run(config:Result<Config, &'static str>){
         // logic a singal flag passed. Also if statement hell what idiot wrote this... 
          if config.flag[0] == String::from("-a") {
                         let user_query:String = String::from(&config.query); 
-                            println!("{}", &config.path);
-                        let res: recursive_print_all::Pretty = recursive_print_all::recursive_print_all(config.query, config.path);      
+                            println!(".");
+                        let res: print_tree_all::Pretty = print_tree_all::recursive_print_all(config.query, config.path,0);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);
