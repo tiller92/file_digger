@@ -32,18 +32,22 @@ pub fn recursive_print_all(name: String, path:String, depth:u32) -> Pretty{
       let meta = metadata(dir.path());
       match meta {
           Ok(place) => {
-                  let mut dash_string = String::from("|-");
+                  let mut dash_string = String::from("|  ");
+                  let mut dash_file = String::from("|  ");
                   for i in 0..depth{
-                    dash_string.insert(0,' '); 
-                  } 
-                  for i in 0..depth{
-                    dash_string.push('-');
+                    dash_string.push('|');
+                    dash_string.push(' ');
+                    dash_string.push(' ');
+                    dash_file.push('|');
+                    dash_file.push(' ');
+                    dash_file.push(' ');
+                    
                   } 
               if place.is_dir() {
             // print folder
             // now print each folder and file
                   folder_count = folder_count + 1;
-                  println!("{}{}",dash_string, dir.file_name().to_str().unwrap());
+                  println!("{}-{}",dash_string, dir.file_name().to_str().unwrap());
                   let path_to_dir: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&name);
                   if path_to_dir == query {
@@ -54,7 +58,7 @@ pub fn recursive_print_all(name: String, path:String, depth:u32) -> Pretty{
 
                if place.is_file() { 
                   file_count = file_count +1;
-                  println!("{}{}",dash_string, dir.path().file_name().unwrap().to_str().unwrap());
+                  println!("{}-{}",dash_file, dir.path().file_name().unwrap().to_str().unwrap());
                   let location: path::PathBuf = path::PathBuf::from(dir.path().file_name().unwrap());
                   let query: path::PathBuf = path::PathBuf::from(&name);
                       if location == query {
