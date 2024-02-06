@@ -7,6 +7,7 @@ mod pretty_recurse_no_dots;
 mod fast_search_all;
 mod recursive_print_all;
 mod print_tree_all;
+mod print_tree;
 
 pub struct Config {
     pub path:String,
@@ -190,7 +191,7 @@ pub fn run(config:Result<Config, &'static str>){
      }else
      if config.flag.len() == 0 {
         let user_query:String = String::from(&config.query); 
-        let res = recursive_file_search::recursive_file_search(config.query,config.path);
+        let res = print_tree::print_tree(config.query,config.path,0);
             println!(" folders {}, files {} ", res.folders, res.files);
         if res.found.len() > 0 {
             println!("  '{}' was found in the following paths:", user_query);
