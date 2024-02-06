@@ -35,7 +35,7 @@ pub fn print_tree(name: String, path:String, depth:u32) -> Pretty{
             if dir.file_name().to_str().unwrap().starts_with(".") == false{
             let mut dash_string = String::from("  ");
             let mut dash_file = String::from("  ");
-                  for i in 0..depth{
+                  for _i in 0..depth{
                     dash_string.push('|');
                     dash_string.push(' ');
                     dash_string.push(' ');

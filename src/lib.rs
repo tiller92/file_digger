@@ -1,11 +1,8 @@
 use std::env;
 mod flag;
 mod recursive_file_search;
-mod no_dot_files_verbose_path;
 mod fast_search_no_dots;
-mod pretty_recurse_no_dots;
 mod fast_search_all;
-mod recursive_print_all;
 mod print_tree_all;
 mod print_tree;
 
@@ -95,7 +92,7 @@ pub fn run(config:Result<Config, &'static str>){
         } else if config.flag[0] == String::from("-v") && config.flag[1] == String::from("-l") {
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = no_dot_files_verbose_path::no_dot_files_verbose_path(config.query,config.path);
+                        let res = print_tree::print_tree(config.query,config.path,0);
                             println!(" folders {}, files {} ", res.folders, res.files);
                         if res.found.len() > 0 {
                             println!("  '{}' was found in the following paths:", user_query);
@@ -108,7 +105,7 @@ pub fn run(config:Result<Config, &'static str>){
         } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-v") {
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = no_dot_files_verbose_path::no_dot_files_verbose_path(config.query,config.path);
+                        let res = print_tree::print_tree(config.query,config.path,0);
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);
@@ -119,9 +116,10 @@ pub fn run(config:Result<Config, &'static str>){
                                 println!(" No file or Directory with the name » '{}'", user_query)
                             }
         } else if config.flag[0] == String::from("-l") && config.flag[1] == String::from("-f") && config.query != String::from(""){
+
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = fast_search_no_dots::fast_search_no_dots(config.query, config.path);      
+                        let res = print_tree::print_tree(config.query, config.path,0);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);

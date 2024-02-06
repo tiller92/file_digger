@@ -1,27 +1,28 @@
 
 
-### File Digger (rip_tree)
+## File Digger (rip_tree)
  
   # Recreating the popular tree command but with rust. Some goals inlcude:   
         1. implementing popular tree commands,  
         2. creating a verison with similar performance,   
         3. a version with a nice looking command line output,  
         4. no external crates or dependencies,
-        5. create a linux friendly version as well
+        5. search functionality that returns a list of paths 
+            where a file or directory was found
   
-   #  Install 
+#     Install 
         `cargo install riptree`
    
-  # Usage 
-        search for a file in a given directory -f flag will not print anything until its done searching.
-        ` riptree /path/to/folder 'query' -f `
-       
+#     Usage (more functionality coming) 
 
         just calling riptree will display the folders and files of the current directory
-        `riptree` (will use your current directory) 
+        `riptree` (will use your current directory will not look through or display . folders or) 
 
-        look for a file fast and skip . files
-        `riptree 'query' -f -l`
+        pass riptree a path to start somewhere besides the current directory
+        `riptree /some/path/to/somewhere/`
+
+        display dot folder and files 
+        `riptree -a`
 
         search for a file or directory in the current directory 
         `riptree 'query'`
