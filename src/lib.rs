@@ -150,7 +150,7 @@ pub fn run(config:Result<Config, &'static str>){
         // logic a singal flag passed. Also if statement hell what idiot wrote this... 
          if config.flag[0] == String::from("-a") {
                         let user_query:String = String::from(&config.query); 
-                            println!(".");
+                            println!("{} ", &config.path);
                         let res: print_tree_all::Pretty = print_tree_all::recursive_print_all(config.query, config.path,0);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
