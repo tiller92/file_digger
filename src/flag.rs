@@ -4,11 +4,17 @@ pub fn help(flag:String)-> String {
     if flag == "--help" {
          _msg = String::from("
             
-            riptree will search a folders for a file you pass it. It also displays the folders and files 
-            in the given path.
-            
-            example:
-                riptree folder_name/folder_name 'file_name.txt'
+           riptree will display the current path and if you pass it a file or folder name it will 
+           give you all the paths it finds with that file or folder. See --help for more information and functionality.
+
+           By default it displays all the files and folders in the current directory
+                `riptree` 
+
+           If you pass it a path it will start at that path
+                `riptree /some/path/to/display` 
+
+           This command will search the current directory for the string you gave it
+                `riptree 'file_name.txt'`
 
                 
             ");
@@ -21,8 +27,8 @@ pub fn help(flag:String)-> String {
 // DONE -f or -full-path: Prints the full path prefix for each file
 // -i or -ignore-case: ignores case when sorting files
 // -x: Stay on the current file system only, as with find -xdev	
-// -l: Do not list those files that match the wild-card pattern
-// -p or '-prune' : Omits the specified directory from the tree
+// DONE -l: Do not list those files that match the wild-card pattern
+// DONE -p or '-prune' : Omits the specified directory from the tree
 // -filenlimit# :	Do not descend directories that contain more than # entrie
 // -t : Sort the output by last modification time instead of alphabetically.
 //–noreport : Omits printing of the file and directory report at the end of the tree listing

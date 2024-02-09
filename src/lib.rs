@@ -1,11 +1,14 @@
 use std::env;
 
+
+
 mod flag;
 mod print_tree_all;
 mod print_tree;
 mod print_dirs;
 mod print_full_path;
 mod print_ignore_pattern;
+mod print_prune;
 pub struct Config {
     pub path:String,
     pub query:String, 
@@ -196,7 +199,22 @@ pub fn run(config:Result<Config, &'static str>){
                 }else if user_query != "" && config.flag[0] != "-l"{
                     println!(" No file or Directory with the name » '{}'", user_query) 
                 }
-         }  
+         }  else if config.flag[0] == String::from("-p") {
+                        let user_query:String = String::from(&config.query); 
+                            println!("{}", &config.path);
+                        let res = print_prune::print_prune(config.query, config.path,0);      
+                            println!(" folders {}, files {} ", res.folders, res.files);
+                            if res.found.len() > 0 {
+                                println!("  '{}' was found in the following paths:", user_query);
+                                for item in res.found {
+                                    println!("       {}", item);
+                                    }
+                            }else if user_query != ""{
+                                println!("pruned » '{}'", user_query)
+                            }else if user_query == "" {
+                                println!("...you didn't give me anything to prune...")
+                            }
+         }
      }else
      if config.flag.len() == 0 {
         let user_query:String = String::from(&config.query); 
