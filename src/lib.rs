@@ -1,10 +1,13 @@
 use std::env;
+
+use crate::print_full_path::print_full_path;
 mod flag;
 mod recursive_file_search;
 mod fast_search_no_dots;
 mod print_tree_all;
 mod print_tree;
 mod print_dirs;
+mod print_full_path;
 
 pub struct Config {
     pub path:String,
@@ -172,9 +175,9 @@ pub fn run(config:Result<Config, &'static str>){
                             }else if user_query != ""{
                                 println!(" No file or Directory with the name » '{}'", user_query)
                             }
-         } else if config.flag[0] == String::from("-v") { 
+         } else if config.flag[0] == String::from("-f") { 
             let user_query:String = String::from(&config.query); 
-            let res = recursive_file_search::recursive_file_search(config.query,config.path);
+            let res = print_full_path::print_full_path(config.query,config.path,0);
                 println!(" folders {}, files {} ", res.folders, res.files);
             if res.found.len() > 0 {
                 println!("  '{}' was found in the following paths:", user_query);

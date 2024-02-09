@@ -17,8 +17,8 @@ pub fn help(flag:String)-> String {
 }
 // list of flags to match tree flags
 // DONE -a or -all: show all files even hidden files and directories 
-// -d or -dirs-only: list only directories
-// -f or -full-path: Prints the full path prefix for each file
+// DONE -d or -dirs-only: list only directories
+// DONE -f or -full-path: Prints the full path prefix for each file
 // -i or -ignore-case: ignores case when sorting files
 // -x: Stay on the current file system only, as with find -xdev	
 // -l: Do not list those files that match the wild-card pattern
