@@ -1,9 +1,6 @@
 use std::env;
 
-use crate::print_full_path::print_full_path;
 mod flag;
-mod recursive_file_search;
-mod fast_search_no_dots;
 mod print_tree_all;
 mod print_tree;
 mod print_dirs;
@@ -134,7 +131,7 @@ pub fn run(config:Result<Config, &'static str>){
         } else if config.flag[0] == String::from("-f") && config.flag[1] == String::from("-l") && config.query != String::from(""){
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = fast_search_no_dots::fast_search_no_dots(config.query, config.path);      
+                        let res = print_tree::print_tree(config.query, config.path,0);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);
