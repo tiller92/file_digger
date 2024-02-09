@@ -2,9 +2,9 @@ use std::env;
 mod flag;
 mod recursive_file_search;
 mod fast_search_no_dots;
-mod fast_search_all;
 mod print_tree_all;
 mod print_tree;
+mod print_dirs;
 
 pub struct Config {
     pub path:String,
@@ -73,7 +73,6 @@ impl Config {
 
 // handle arg length and finalize funcionality
 pub fn run(config:Result<Config, &'static str>){ 
-    //fn really just handles the config struct and handles errors before we start recursing 
     let config = match config {
         Ok(config) => config,
         _ =>  Config{
@@ -160,10 +159,10 @@ pub fn run(config:Result<Config, &'static str>){
                             }else if user_query != ""{
                                 println!(" No file or Directory with the name » '{}'", user_query)
                             }
-         } else if config.flag[0] == String::from("-f"){ 
+         } else if config.flag[0] == String::from("-d"){ 
                         let user_query:String = String::from(&config.query); 
                             println!("{}", &config.path);
-                        let res = fast_search_all::fast_search_all(config.query, config.path);      
+                        let res = print_dirs::print_dirs(config.query, config.path,0);      
                             println!(" folders {}, files {} ", res.folders, res.files);
                             if res.found.len() > 0 {
                                 println!("  '{}' was found in the following paths:", user_query);
