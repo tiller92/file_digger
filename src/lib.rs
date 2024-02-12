@@ -1,5 +1,4 @@
-use std::env;
-
+use std::{env, usize};
 
 
 mod flag;
@@ -9,6 +8,7 @@ mod print_dirs;
 mod print_full_path;
 mod print_ignore_pattern;
 mod print_prune;
+mod print_file_n_limit;
 pub struct Config {
     pub path:String,
     pub query:String, 
@@ -84,7 +84,6 @@ pub fn run(config:Result<Config, &'static str>){
                     flag:Vec::new(),
                     } 
     };
-       // set func variable and that gets filled with the func needed to satisfy res
     if config.flag.len() > 1 {
         // logic for multiple flags
         if config.flag[0] == String::from("-v") && config.flag[1] == String::from("-f"){
@@ -214,6 +213,18 @@ pub fn run(config:Result<Config, &'static str>){
                             }else if user_query == "" {
                                 println!("...you didn't give me anything to prune...")
                             }
+         }  else if config.flag[0] == String::from("--filelimit") || config.flag[0] == String::from("-filelimit") {
+                        println!("{}", config.path);
+                       let mut n:usize= 0;
+                       let parsed: Result<usize, _> = config.query.parse();
+                       match parsed {
+                        Ok(num)=> {n = num;}
+                        Err(e)=> {
+                            println!(" You did not specify a limit so I got this error:\n '{}'",e);
+                            println!("  `riptree --filelimit 3`");
+                       }}
+                        let res = print_file_n_limit::print_file_n_limit(config.query, config.path,0,n);
+                            println!(" folders {}, files {} ", res.folders, res.files);
          }
      }else
      if config.flag.len() == 0 {

@@ -26,6 +26,9 @@
 
         search for a file or directory in the current directory 
         `riptree 'query'`
+
+        dont display directories with more then the specified files
+        `riptree --filelimit #`
         
         for more riptree --help
         `riptree --help`

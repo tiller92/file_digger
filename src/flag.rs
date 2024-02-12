@@ -29,7 +29,7 @@ pub fn help(flag:String)-> String {
 // -x: Stay on the current file system only, as with find -xdev	
 // DONE -l: Do not list those files that match the wild-card pattern
 // DONE -p or '-prune' : Omits the specified directory from the tree
-// -filenlimit# :	Do not descend directories that contain more than # entrie
+// -filenlimit# :	Do not descend directories that contain more than # entries
 // -t : Sort the output by last modification time instead of alphabetically.
 //–noreport : Omits printing of the file and directory report at the end of the tree listing
 // -s :  Print the size of each file along with the name
